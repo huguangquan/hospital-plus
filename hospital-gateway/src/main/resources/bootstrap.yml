@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: hospital-gateway
+  cloud:
+    nacos:
+      server-addr: http://127.0.0.1:8848
+      username: nacos
+      password: nacos
+      config:
+        prefix: ${spring.application.name}
+        context-path: nacos
+        file-extension: yml
+        namespace: 992f39a4-1dee-45e8-ad92-a637b9a5b086
+        refresh-enabled: true

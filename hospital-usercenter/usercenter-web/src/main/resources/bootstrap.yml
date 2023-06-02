@@ -1,8 +1,9 @@
 spring:
   application:
-    name: hospital-gateway
+    name: hospital-usercenter
   cloud:
     nacos:
+      namespace: 07bd59f4-f242-4e00-943f-a5c5e1f480f9
       server-addr: http://127.0.0.1:8848
       username: nacos
       password: nacos
@@ -10,5 +11,7 @@ spring:
         prefix: ${spring.application.name}
         context-path: nacos
         file-extension: yml
-        namespace: 07bd59f4-f242-4e00-943f-a5c5e1f480f9
+        namespace: ${spring.cloud.nacos.namespace}
         refresh-enabled: true
+      discovery:
+        namespace: ${spring.cloud.nacos.namespace}

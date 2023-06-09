@@ -1,16 +1,13 @@
 package com.plus.hospital.usercenter.controller;
 
-import com.plus.hospital.framework.core.bean.constants.SystemConstants;
+import com.plus.hospital.framework.core.annotations.CurrentAccountId;
 import com.plus.hospital.usercenter.dto.user.UserInfoDTO;
 import com.plus.hospital.usercenter.enums.UserMedicalRoleEnum;
 import com.plus.hospital.usercenter.service.UserBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户controller
@@ -30,7 +27,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/patient/mine")
-    public UserInfoDTO getPatientMine(@RequestHeader(SystemConstants.login_account_header_name) Long accountId) {
+    public UserInfoDTO getPatientMine(@CurrentAccountId Long accountId) {
         return userBusinessService.getUserInfo(accountId, UserMedicalRoleEnum.patient.getCode());
     }
 
@@ -40,7 +37,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/doctor/mine")
-    public UserInfoDTO getDoctorMine(Long accountId) {
+    public UserInfoDTO getDoctorMine(@CurrentAccountId Long accountId) {
         return userBusinessService.getUserInfo(accountId, UserMedicalRoleEnum.doctor.getCode());
     }
 }

@@ -1,6 +1,7 @@
 package com.plus.hospital.usercenter.controller;
 
-import com.plus.hospital.framework.core.bean.constants.SystemConstants;
+import com.plus.hospital.framework.core.annotations.CurrentAccountId;
+import com.plus.hospital.framework.core.constants.SystemConstants;
 import com.plus.hospital.usercenter.dto.account.LoginPasswordRequest;
 import com.plus.hospital.usercenter.dto.account.LoginResponse;
 import com.plus.hospital.usercenter.dto.account.LoginSmsRequest;
@@ -45,7 +46,7 @@ public class AccountController {
      * @return
      */
     @PostMapping("/login/smsCode")
-    public LoginResponse loginSms(@RequestBody LoginSmsRequest loginSms,
+    public LoginResponse loginSms(@Validated @RequestBody LoginSmsRequest loginSms,
                                   @RequestHeader("platform") String platform) {
 
         return null;
@@ -56,7 +57,7 @@ public class AccountController {
      */
     @PostMapping("/logout")
     public void logout(@RequestHeader("platform") String platform,
-                       @RequestHeader(SystemConstants.login_account_header_name) Long accountId) {
+                       @CurrentAccountId Long accountId) {
         loginService.logout(platform, accountId);
     }
 

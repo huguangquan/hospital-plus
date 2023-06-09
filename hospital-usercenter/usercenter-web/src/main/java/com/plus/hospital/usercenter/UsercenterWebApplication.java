@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * springboot application 启动类
  * @author hgq
  */
-@SpringBootApplication(scanBasePackages = {"com.plus.hospital.usercenter"})
+@SpringBootApplication(scanBasePackages =
+        {"com.plus.hospital.usercenter", "com.plus.hospital.framework"})
 @Configuration
 @EnableDiscoveryClient
 @MapperScan("com.plus.hospital.usercenter.dao.mapper")

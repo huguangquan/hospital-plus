@@ -27,12 +27,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Date;
 import java.util.Objects;
 
 /**
  * 注册、登录服务实现
+ *
  * @author huguangquan
  * 2023/6/5
  **/
@@ -51,10 +53,10 @@ public class LoginServiceImpl implements LoginService {
     public void registerUser(RegisterRequest registerRequest) {
         // 单独验证身份证和手机号的合法性
         if (!IdcardUtil.isValidCard(registerRequest.getIdCard())) {
-            throw  new HospitalPlusException(ErrorCode.invalidate_request_params.getCode(), "身份证格式不合法，请确认后重试!");
+            throw new HospitalPlusException(ErrorCode.invalidate_request_params.getCode(), "身份证格式不合法，请确认后重试!");
         }
         if (!PhoneUtil.isPhone(registerRequest.getMobile())) {
-            throw  new HospitalPlusException(ErrorCode.invalidate_request_params.getCode(), "手机号码格式不合法，请确认后重试!");
+            throw new HospitalPlusException(ErrorCode.invalidate_request_params.getCode(), "手机号码格式不合法，请确认后重试!");
         }
 
         Date now = new Date();
@@ -113,8 +115,8 @@ public class LoginServiceImpl implements LoginService {
         // sa-token进行登录并返回token给前端(响应头写值)
         SaLoginModel saLoginModel = new SaLoginModel();
         saLoginModel.setDevice(loginPassword.getPlatform())
-            .setIsWriteHeader(true);
-        StpUtil.login(userAccount.getId(),saLoginModel);
+                .setIsWriteHeader(true);
+        StpUtil.login(userAccount.getId(), saLoginModel);
 
         // 接口也返回token数据，处理前端无法使用cookie的场景
         LoginResponse loginResponse = new LoginResponse();
@@ -128,5 +130,10 @@ public class LoginServiceImpl implements LoginService {
     public LoginResponse loginSmsCode(LoginSmsRequest loginSms) {
 
         return null;
+    }
+
+    @Override
+    public void logout(String platform, Long loginAccountId) {
+        StpUtil.logout(loginAccountId, platform);
     }
 }

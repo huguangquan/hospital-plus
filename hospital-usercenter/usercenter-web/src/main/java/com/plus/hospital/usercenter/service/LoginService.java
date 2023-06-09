@@ -30,4 +30,11 @@ public interface LoginService {
      */
     LoginResponse loginSmsCode(LoginSmsRequest loginSms);
 
+    /**
+     * 退出
+     * @param platform
+     * @param loginAccountId
+     */
+    void logout(String platform, Long loginAccountId);
+
 }

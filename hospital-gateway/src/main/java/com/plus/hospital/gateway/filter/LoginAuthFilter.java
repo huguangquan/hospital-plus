@@ -3,11 +3,10 @@ package com.plus.hospital.gateway.filter;
 import cn.dev33.satoken.stp.StpUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.plus.hospital.framework.core.bean.constants.FeignErrorCode;
-import com.plus.hospital.framework.core.bean.constants.SystemConstants;
-import com.plus.hospital.framework.core.bean.enums.PlatformEnum;
 import com.plus.hospital.framework.core.bean.response.ResponseResult;
-import feign.form.ContentType;
+import com.plus.hospital.framework.core.constants.SystemConstants;
+import com.plus.hospital.framework.core.enums.ErrorCode;
+import com.plus.hospital.framework.core.enums.PlatformEnum;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -20,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -82,7 +80,7 @@ public class LoginAuthFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> responseInvalidate(ServerHttpResponse response) throws JsonProcessingException {
         ResponseResult responseResult = new ResponseResult();
-        responseResult.failure(FeignErrorCode.forbidden);
+        responseResult.failure(ErrorCode.forbidden);
         byte[] bytes = objectMapper.writeValueAsBytes(responseResult);
         DataBuffer buffer = response.bufferFactory().wrap(bytes);
         response.setStatusCode(HttpStatus.UNAUTHORIZED);

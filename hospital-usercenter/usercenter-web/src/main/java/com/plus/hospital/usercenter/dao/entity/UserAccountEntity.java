@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.Version;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +31,7 @@ public class UserAccountEntity {
     /**
      * 乐观锁
      */
+    @Version
     private Integer revision;
 
     /**
@@ -100,4 +103,19 @@ public class UserAccountEntity {
      * 是否是超级管理员，1是0否
      */
     private Integer isAdmin;
+
+    /**
+     * 最后登录时间
+     */
+    private Date lastLoginTime;
+
+    /**
+     * 最后登录平台
+     */
+    private String lastLoginPlatform;
+
+    /**
+     * 是否是默认密码，1是0否
+     */
+    private Integer defaultPassword;
 }

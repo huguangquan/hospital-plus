@@ -1,6 +1,7 @@
 spring:
   application:
     name: hospital-usercenter
+
   cloud:
     nacos:
       namespace: 07bd59f4-f242-4e00-943f-a5c5e1f480f9

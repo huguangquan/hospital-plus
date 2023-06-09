@@ -1,3 +1,4 @@
+# 配置和nacos保持一致，脱离nacos时修改spring环境变量即可
 server:
   port: 8081
 
@@ -25,7 +26,7 @@ gr:
   # 参数校验非法的响应错误码
   defaultValidateErrorCode: 1000
   # 不托管gr响应的返回类
-  excludeClassPath: com.plus.hospital.framework.core.bean.response.ResponseResult
+  excludeClassPath: com.plus.hospital.framework.core.bean.response.FeignResult
 
 sa-token:
   # token名称 (同时也是cookie名称)
@@ -42,3 +43,24 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/hospital-plus?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password:
+    ssl: false
+    timeout: 2000
+    lettuce:
+      shutdown-timeout: 1000
+      pool:
+        max-active: 16
+        max-idle: 8
+        min-idle: 2
+        max-wait: -1

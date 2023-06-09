@@ -1,0 +1,26 @@
+# 配置和nacos保持一致，脱离nacos时修改spring环境变量即可
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 0
+    password:
+    ssl: false
+    timeout: 2000
+    lettuce:
+      shutdown-timeout: 1000
+      pool:
+        max-active: 16
+        max-idle: 8
+        min-idle: 2
+        max-wait: -1
+
+
+hospital-plus:
+  gateway:
+    exclude-login-uri-list:
+      - /usercenter/user/register
+      - /usercenter/account/login/password

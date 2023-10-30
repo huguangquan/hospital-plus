@@ -2,6 +2,8 @@ package com.plus.hospital.usercenter.dto.user;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 用户信息实体
  * @author huguangquan
@@ -29,5 +31,10 @@ public class UserInfoDTO {
      * 是否实名：1是0否
      */
     private Integer verifiedFlag;
+
+    /**
+     * 用户角色
+     */
+    private List<String> roles;
 
 }

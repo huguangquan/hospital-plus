@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class LoginPasswordRequest {
     @NotNull(message = "登录手机号不可空")
-    private String mobile;
+    private String username;
 
     @NotNull(message = "登录密码不可空")
     private String password;

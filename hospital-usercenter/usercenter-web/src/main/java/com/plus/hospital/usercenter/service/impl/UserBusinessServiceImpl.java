@@ -4,14 +4,25 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.plus.hospital.usercenter.constants.SystemConstant;
+import com.plus.hospital.usercenter.dao.convert.MenuConvert;
+import com.plus.hospital.usercenter.dao.entity.MenuEntity;
 import com.plus.hospital.usercenter.dao.entity.UserAccountEntity;
 import com.plus.hospital.usercenter.dao.entity.UserEntity;
+import com.plus.hospital.usercenter.dao.entity.UserRoleEntity;
+import com.plus.hospital.usercenter.dao.service.MenuService;
 import com.plus.hospital.usercenter.dao.service.UserAccountService;
+import com.plus.hospital.usercenter.dao.service.UserRoleService;
 import com.plus.hospital.usercenter.dao.service.UserService;
+import com.plus.hospital.usercenter.dto.menu.MenuDTO;
 import com.plus.hospital.usercenter.dto.user.UserInfoDTO;
 import com.plus.hospital.usercenter.service.UserBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户+账户业务serviceImpl
@@ -26,6 +37,12 @@ public class UserBusinessServiceImpl implements UserBusinessService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRoleService userRoleService;
+
+    @Autowired
+    private MenuService menuService;
+
     @Override
     public UserInfoDTO getUserInfo(Long accountId, Integer userMedicalRole) {
         UserAccountEntity account = userAccountService.getById(accountId);
@@ -34,8 +51,10 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         }
         LambdaQueryWrapper<UserEntity> userWrapper = new LambdaQueryWrapper<>();
         userWrapper.eq(UserEntity::getAccountId, accountId)
-                .eq(UserEntity::getMedicalRole, userMedicalRole)
                 .eq(UserEntity::getDeleteFlag, SystemConstant.data_delete_n);
+        if (null != userMedicalRole) {
+            userWrapper.eq(UserEntity::getMedicalRole, userMedicalRole);
+        }
         UserEntity userEntity = userService.getOne(userWrapper);
         if (null == userEntity) {
             return null;
@@ -51,6 +70,33 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         userInfoDTO.setBirthday(DateUtil.format(userEntity.getBirthday(), DatePattern.NORM_DATE_PATTERN));
         userInfoDTO.setGender(userEntity.getGender());
         userInfoDTO.setVerifiedFlag(userEntity.getVerifiedFlag());
+
+        // todo 用户角色
+        userInfoDTO.setRoles(Arrays.asList(new String[]{"test"}));
         return userInfoDTO;
+    }
+
+    @Override
+    public List<MenuDTO> getUserRoleMenuList(Long accountId, String platform) {
+        LambdaQueryWrapper<UserEntity> userWrapper = new LambdaQueryWrapper<>();
+        userWrapper.eq(UserEntity::getAccountId, accountId)
+                .eq(UserEntity::getDeleteFlag, SystemConstant.data_delete_n);
+        UserEntity userEntity = userService.getOne(userWrapper);
+        if (userEntity == null) {
+            return null;
+        }
+
+        List<UserRoleEntity> userRoles = userRoleService.list(new LambdaQueryWrapper<UserRoleEntity>().eq(UserRoleEntity::getUserId, userEntity.getId()));
+        if (CollectionUtils.isEmpty(userRoles)) {
+            return null;
+        }
+
+        List<Long> userRoleIds = userRoles.stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
+        List<MenuEntity> userMenuList = menuService.selectDistinctRolesMenus(platform, userRoleIds);
+        if (CollectionUtils.isEmpty(userMenuList)) {
+            return null;
+        }
+
+        return userMenuList.stream().map(entity -> MenuConvert.INSTANCE.toDto(entity)).collect(Collectors.toList());
     }
 }

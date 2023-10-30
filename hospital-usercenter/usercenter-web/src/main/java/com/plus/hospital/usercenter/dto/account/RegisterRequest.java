@@ -40,5 +40,5 @@ public class RegisterRequest {
     /**
      * 前端传递的签名密码
      */
-    private String signPassword;
+    private String password;
 }

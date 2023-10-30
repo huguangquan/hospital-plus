@@ -97,15 +97,15 @@ public class PasswordUtil {
 //        String pass = generateEncodePassword("12345678", salt);
 //        System.out.println(pass);
 
-//        String salt= "fZsFrZ";
-//        String encodePass = "844433947a79a9d2a75ae1b6b4683ffd";
+        String salt= "fZsFrZ";
+        String encodePass = "844433947a79a9d2a75ae1b6b4683ffd";
         String pass = "jya3NMfD";
-//        boolean validateRst = validatePassword(pass, salt, encodePass);
-//        System.out.println(validateRst);
+        boolean validateRst = validatePassword(pass, salt, encodePass);
+        System.out.println(validateRst);
 
-        String signPass = signPassword(pass);
-        System.out.println(signPass);
-        String temp = unSignPassword(signPass);
-        System.out.println(temp);
+//        String signPass = signPassword(pass);
+//        System.out.println(signPass);
+//        String temp = unSignPassword("7Mn6CwEri/hB8lxFj/Hf/A==");
+//        System.out.println(temp);
     }
 }

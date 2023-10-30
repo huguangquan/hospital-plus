@@ -1,7 +1,6 @@
 package com.plus.hospital.usercenter.controller;
 
 import com.plus.hospital.framework.core.annotations.CurrentAccountId;
-import com.plus.hospital.framework.core.constants.SystemConstants;
 import com.plus.hospital.usercenter.dto.account.LoginPasswordRequest;
 import com.plus.hospital.usercenter.dto.account.LoginResponse;
 import com.plus.hospital.usercenter.dto.account.LoginSmsRequest;
@@ -9,7 +8,11 @@ import com.plus.hospital.usercenter.dto.account.RegisterRequest;
 import com.plus.hospital.usercenter.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 用户操作

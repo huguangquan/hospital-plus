@@ -60,9 +60,9 @@ public class MenuEntity {
     private Integer deleteFlag;
 
     /**
-     * 菜单所属平台，1PC 2小程序患者端 3小程序医生端
+     * 菜单所属平台，取值见：PlatformEnum
      */
-    private Integer platform;
+    private String platform;
 
     /**
      * 菜单名称

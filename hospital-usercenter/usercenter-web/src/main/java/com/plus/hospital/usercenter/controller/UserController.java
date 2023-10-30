@@ -22,22 +22,12 @@ public class UserController {
     private UserBusinessService userBusinessService;
 
     /**
-     * 患者端查看我的资料
+     * 我的资料
      * @param accountId
      * @return
      */
-    @GetMapping("/patient/mine")
+    @GetMapping("/mine")
     public UserInfoDTO getPatientMine(@CurrentAccountId Long accountId) {
-        return userBusinessService.getUserInfo(accountId, UserMedicalRoleEnum.patient.getCode());
-    }
-
-    /**
-     * 医生端查看我的资料
-     * @param accountId
-     * @return
-     */
-    @GetMapping("/doctor/mine")
-    public UserInfoDTO getDoctorMine(@CurrentAccountId Long accountId) {
-        return userBusinessService.getUserInfo(accountId, UserMedicalRoleEnum.doctor.getCode());
+        return userBusinessService.getUserInfo(accountId, null);
     }
 }

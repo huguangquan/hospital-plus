@@ -66,10 +66,9 @@ public class LoginServiceImpl implements LoginService {
         userAccountEntity.setCreatedTime(now);
         String salt = PasswordUtil.generateString(6);
         userAccountEntity.setPassSalt(salt);
-        if (StringUtils.isNotEmpty(registerRequest.getSignPassword())) {
+        if (StringUtils.isNotEmpty(registerRequest.getPassword())) {
             // 处理密码，用户注册时密码可选字段
-            String password = PasswordUtil.unSignPassword(registerRequest.getSignPassword());
-            userAccountEntity.setPassword(password);
+            userAccountEntity.setPassword(registerRequest.getPassword());
             userAccountEntity.setDefaultPassword(0);
         } else {
             // 生成随机8位数密码
@@ -90,13 +89,16 @@ public class LoginServiceImpl implements LoginService {
         userService.save(userEntity);
 
         // todo: sms短信通知用户初始化密码
+        if (userAccountEntity.getDefaultPassword() ==  1) {
+
+        }
     }
 
     @Override
     public LoginResponse loginPassword(LoginPasswordRequest loginPassword) {
         UserAccountEntity userAccount = userAccountService.getOne(
                 new LambdaQueryWrapper<UserAccountEntity>()
-                        .eq(UserAccountEntity::getMobile, loginPassword.getMobile())
+                        .eq(UserAccountEntity::getMobile, loginPassword.getUsername())
                         .eq(UserAccountEntity::getDeleteFlag, SystemConstant.data_delete_n));
         if (Objects.isNull(userAccount)) {
             throw new HospitalPlusException(ErrorCode.login_error.getCode(), ErrorCode.login_error.getMessage());
@@ -106,8 +108,9 @@ public class LoginServiceImpl implements LoginService {
             throw new HospitalPlusException(ErrorCode.login_locked.getCode(), ErrorCode.login_locked.getMessage());
         }
 
-        String password = PasswordUtil.unSignPassword(loginPassword.getPassword());
-        if (!userAccount.getPassword().equals(PasswordUtil.generateEncodePassword(password, userAccount.getPassSalt()))) {
+//        String password = PasswordUtil.unSignPassword(loginPassword.getPassword());
+        // 前端登录传递密码明文，如果需要提高安全需要调整前端提交时进行密码明文AES解密
+        if (!userAccount.getPassword().equals(PasswordUtil.generateEncodePassword(loginPassword.getPassword(), userAccount.getPassSalt()))) {
             // todo 密码错误次数处理以及是否状态锁定
             throw new HospitalPlusException(ErrorCode.login_error.getCode(), ErrorCode.login_error.getMessage());
         }

@@ -3,4 +3,4 @@ server:
 
 sa-token:
   # token名称 (同时也是cookie名称)
-  token-name: hp-token
+  token-name: hpToken

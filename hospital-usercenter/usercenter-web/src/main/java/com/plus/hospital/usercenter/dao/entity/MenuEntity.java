@@ -98,4 +98,9 @@ public class MenuEntity {
      * 排序
      */
     private Integer sorted;
+
+    /**
+     * 菜单图标
+     */
+    private String icon;
 }

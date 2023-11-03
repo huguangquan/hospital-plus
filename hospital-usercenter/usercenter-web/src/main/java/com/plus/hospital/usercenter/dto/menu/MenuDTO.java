@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 菜单menu实体DTO
@@ -21,9 +23,9 @@ public class MenuDTO {
     private Long pid;
 
     /**
-     * 1PC 2小程序患者端 3小程序医生端
+     * 菜单归属平台
      */
-    private Integer platform;
+    private String platform;
 
     /**
      * 菜单名
@@ -42,12 +44,22 @@ public class MenuDTO {
     private Integer type;
 
     /**
-     * 菜单或按钮跳转路由
+     * 菜单的路由name
      */
     private String router;
+
+    /**
+     * 菜单或按钮跳转路由
+     */
+    private String url;
 
     /**
      * 图标
      */
     private String icon;
+
+    /**
+     * 子菜单集合
+     */
+    private List<MenuDTO> children = new ArrayList<>();
 }

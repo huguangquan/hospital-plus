@@ -30,9 +30,9 @@ public class RoleMenuController {
      * @param accountId
      * @return
      */
-    @GetMapping("/list")
-    public List<MenuDTO> getUserRoleMenuList(@CurrentAccountId Long accountId, @RequestHeader("platform") String platform) {
-        return userBusinessService.getUserRoleMenuList(accountId, platform);
+    @GetMapping("/tree")
+    public List<MenuDTO> getUserRoleMenuTree(@CurrentAccountId Long accountId, @RequestHeader("platform") String platform) {
+        return userBusinessService.getUserRoleMenuTree(accountId, platform);
     }
 
     /**

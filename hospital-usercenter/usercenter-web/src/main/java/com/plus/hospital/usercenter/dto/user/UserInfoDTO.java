@@ -37,4 +37,9 @@ public class UserInfoDTO {
      */
     private List<String> roles;
 
+    /**
+     * 账号状态，0锁定1正常
+     */
+    private Integer status;
+
 }

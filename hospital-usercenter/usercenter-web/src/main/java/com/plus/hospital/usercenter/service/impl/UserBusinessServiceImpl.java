@@ -3,6 +3,7 @@ package com.plus.hospital.usercenter.service.impl;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.plus.hospital.usercenter.constants.SystemConstant;
 import com.plus.hospital.usercenter.dao.convert.MenuConvert;
 import com.plus.hospital.usercenter.dao.entity.MenuEntity;
@@ -15,11 +16,13 @@ import com.plus.hospital.usercenter.dao.service.UserRoleService;
 import com.plus.hospital.usercenter.dao.service.UserService;
 import com.plus.hospital.usercenter.dto.menu.MenuDTO;
 import com.plus.hospital.usercenter.dto.user.UserInfoDTO;
+import com.plus.hospital.usercenter.dto.user.UserQueryRequest;
 import com.plus.hospital.usercenter.service.UserBusinessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +45,11 @@ public class UserBusinessServiceImpl implements UserBusinessService {
 
     @Autowired
     private MenuService menuService;
+
+    @Override
+    public Page<UserInfoDTO> queryUserPages(UserQueryRequest request) {
+        return userService.queryUserPage(request);
+    }
 
     @Override
     public UserInfoDTO getUserInfo(Long accountId, Integer userMedicalRole) {
@@ -98,5 +106,35 @@ public class UserBusinessServiceImpl implements UserBusinessService {
         }
 
         return userMenuList.stream().map(entity -> MenuConvert.INSTANCE.toDto(entity)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MenuDTO> getUserRoleMenuTree(Long accountId, String platform) {
+        List<MenuDTO> userRoleMenuList = this.getUserRoleMenuList(accountId, platform);
+        if (CollectionUtils.isEmpty(userRoleMenuList)) {
+            return null;
+        }
+        // 1. 获取所有根菜单
+        List<MenuDTO> rootMenu = userRoleMenuList.stream().filter(menu -> menu.getPid() == -1).collect(Collectors.toList());
+        // 2. 递归查询子菜单
+        for (MenuDTO menu : rootMenu) {
+            setChileMenuList(menu, userRoleMenuList);
+        }
+        return rootMenu;
+    }
+
+    /**
+     * 递归遍历查询设置子菜单
+     * @param currentMenu
+     */
+    private void setChileMenuList(MenuDTO currentMenu, List<MenuDTO> menuList) {
+        List<MenuDTO> childMenus = menuList.stream().filter(menu -> menu.getPid().longValue() == currentMenu.getId().longValue())
+                .collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(childMenus)) {
+            currentMenu.setChildren(childMenus);
+            for (MenuDTO childMenu : childMenus) {
+                setChileMenuList(childMenu, menuList);
+            }
+        }
     }
 }

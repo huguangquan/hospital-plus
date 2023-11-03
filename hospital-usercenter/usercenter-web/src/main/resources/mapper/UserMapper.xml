@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.plus.hospital.usercenter.dao.mapper.UserMapper">
+
+    <resultMap id="userResult" type="com.plus.hospital.usercenter.dto.user.UserInfoDTO">
+        <id column="id" property="accountId"></id>
+        <result column="user_name" property="userName"></result>
+        <result column="id_card" property="idCard"></result>
+        <result column="birthday" property="birthday"></result>
+        <result column="gender" property="gender"></result>
+        <result column="verified_flag" property="verifiedFlag"></result>
+        <result column="nick_name" property="nickName"></result>
+        <result column="status" property="status"></result>
+    </resultMap>
+
+    <select id="queryUserPageOrList" resultMap="userResult" parameterType="com.plus.hospital.usercenter.dto.user.UserQueryRequest">
+        select ua.id, u.mobile, u.user_name, u.id_card, u.birthday, u.gender, u.verified_flag, ua.nick_name, ua.status
+        from t_user u inner join t_user_account ua on u.account_id = ua.id
+        where u.medical_role = 1
+          <if test="request.mobile != null and request.mobile != ''">
+              and u.mobile like concat('%', #{request.mobile}, '%')
+          </if>
+          <if test="request.username != null and request.username != ''">
+              and u.user_name like concat('%', #{request.username}, '%')
+          </if>
+          <if test="request.accountStatus != null">
+              and ua.status = #{request.accountStatus}
+          </if>
+          <if test="request.verifiedFlag != null">
+              and u.verified_flag = #{request.verifiedFlag}
+          </if>
+    </select>
+</mapper>
